@@ -17,6 +17,7 @@
 #import "UITableView+HoomicTool.h"
 #import "NSMutableAttributedString+nl_Image.h"
 #import "UIImage+Color.h"
+#import "UIImage+nl_Kit.h"
 #import "UIButton+nl_kit.h"
 #import "NSArray+nl_Kit.h"
 #import "UITextField+nl_Kit.h"
@@ -26,6 +27,9 @@
 #import "NSDictionary+nl_Kit.h"
 #import "NSURLRequest+nl_Kit.h"
 #import "UIColor+nl_Kit.h"
+#import "NSData+nl_Kit.h"
+#import "NSDate+nl_Kit.h"
+#import "UINavigationBar+nl_Kit.h"
 
 @interface NLKit : NSObject
 

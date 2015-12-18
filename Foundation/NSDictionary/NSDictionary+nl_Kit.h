@@ -53,6 +53,6 @@
 
 @interface NSMutableDictionary (nl_SafeAccessory)
 
-- (BOOL)nl_setObject:(id)object forKey:(NSString *)key;
+- (BOOL)nl_setObject:(id)object forKey:(id)key;
 
 @end

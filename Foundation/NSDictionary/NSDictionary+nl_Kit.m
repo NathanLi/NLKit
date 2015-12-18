@@ -51,7 +51,7 @@
 
 @implementation NSMutableDictionary (nl_SafeAccessory)
 
-- (BOOL)nl_setObject:(id)object forKey:(NSString *)key {
+- (BOOL)nl_setObject:(id)object forKey:(id)key {
   if (!object) return NO;
   
   [self setObject:object forKey:key];

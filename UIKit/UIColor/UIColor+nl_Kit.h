@@ -11,4 +11,6 @@
 
 @interface UIColor (nl_Kit)
 
++ (UIColor *)nl_buttonSystemTypeColor;
+
 @end

@@ -82,13 +82,11 @@
     subView.backgroundColor = color;
     [self addSubview:subView];
     
-    if (self.translatesAutoresizingMaskIntoConstraints == NO) {
-      subView.translatesAutoresizingMaskIntoConstraints = NO;
-      NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
-      NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView(height)]" options:0 metrics:@{@"height": @(width)} views:NSDictionaryOfVariableBindings(subView)];
-      [self addConstraints:constraintH];
-      [self addConstraints:constraintV];
-    }
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
+    NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView(height)]" options:0 metrics:@{@"height": @(width)} views:NSDictionaryOfVariableBindings(subView)];
+    [self addConstraints:constraintH];
+    [self addConstraints:constraintV];
     
   }
   
@@ -98,13 +96,11 @@
     
     [self addSubview:subView];
     
-    if (self.translatesAutoresizingMaskIntoConstraints == NO) {
-      subView.translatesAutoresizingMaskIntoConstraints = NO;
-      NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView(width)]" options:0 metrics:@{@"width": @(width)}  views:NSDictionaryOfVariableBindings(subView)];
-      NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
-      [self addConstraints:constraintH];
-      [self addConstraints:constraintV];
-    }
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView(width)]" options:0 metrics:@{@"width": @(width)}  views:NSDictionaryOfVariableBindings(subView)];
+    NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
+    [self addConstraints:constraintH];
+    [self addConstraints:constraintV];
   }
   
   
@@ -113,13 +109,11 @@
     subView.backgroundColor = color;
     [self addSubview:subView];
     
-    if (self.translatesAutoresizingMaskIntoConstraints == NO) {
-      subView.translatesAutoresizingMaskIntoConstraints = NO;
-      NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
-      NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[subView(height)]|" options:0 metrics:@{@"height": @(width)} views:NSDictionaryOfVariableBindings(subView)];
-      [self addConstraints:constraintH];
-      [self addConstraints:constraintV];
-    }
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
+    NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[subView(height)]|" options:0 metrics:@{@"height": @(width)} views:NSDictionaryOfVariableBindings(subView)];
+    [self addConstraints:constraintH];
+    [self addConstraints:constraintV];
   }
   
   
@@ -128,13 +122,11 @@
     subView.backgroundColor = color;
     [self addSubview:subView];
     
-    if (self.translatesAutoresizingMaskIntoConstraints == NO) {
-      subView.translatesAutoresizingMaskIntoConstraints = NO;
-      NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[subView(width)]|" options:0 metrics:@{@"width": @(width)}  views:NSDictionaryOfVariableBindings(subView)];
-      NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
-      [self addConstraints:constraintH];
-      [self addConstraints:constraintV];
-    }
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSArray *constraintH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[subView(width)]|" options:0 metrics:@{@"width": @(width)}  views:NSDictionaryOfVariableBindings(subView)];
+    NSArray *constraintV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(subView)];
+    [self addConstraints:constraintH];
+    [self addConstraints:constraintV];
   }
 }
 
@@ -260,6 +252,19 @@
   if (pointInsideMethod && nl_pointInsideMethod) {
     method_exchangeImplementations(pointInsideMethod, nl_pointInsideMethod);
   }
+  
+  Method hitTestMethod = class_getInstanceMethod(self, @selector(hitTest:withEvent:));
+  Method nl_hitTestMethod = class_getInstanceMethod(self, @selector(nl_hitTest:withEvent:));
+  if (hitTestMethod && nl_hitTestMethod) {
+    method_exchangeImplementations(hitTestMethod, nl_hitTestMethod);
+  }
+  
+  
+  Method desciptionMethod = class_getInstanceMethod(self, @selector(description));
+  Method nl_desciptionMethod = class_getInstanceMethod(self, @selector(nl_description));
+  if (desciptionMethod && nl_desciptionMethod) {
+    method_exchangeImplementations(desciptionMethod, nl_desciptionMethod);
+  }
 }
 
 - (BOOL)nl_pointInside:(CGPoint)point withEvent:(UIEvent *)event {
@@ -268,6 +273,21 @@
   }
   
   return [self nl_pointInside:point withEvent:event];
+}
+
+- (UIView *)nl_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+  if (self.nl_hitTestBlock && !self.hidden) {
+    return self.nl_hitTestBlock(point, event);
+  }
+  return [self nl_hitTest:point withEvent:event];
+}
+
+- (void)setNl_hitTestBlock:(UIView *(^)(CGPoint, UIEvent *))nl_hitTestBlock {
+  objc_setAssociatedObject(self, @selector(nl_hitTestBlock), nl_hitTestBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (UIView *(^)(CGPoint, UIEvent *))nl_hitTestBlock {
+  return objc_getAssociatedObject(self, @selector(nl_hitTestBlock));
 }
 
 static void *nl_pointInsideBlockKey = &nl_pointInsideBlockKey;
@@ -290,16 +310,41 @@ static void *nl_pointInsideBlockKey = &nl_pointInsideBlockKey;
   return nil;
 }
 
+
+
+- (NSString *)nl_description {
+  id key = [self nl_key];
+  NSString *description = nil;
+  if (key) {
+    description = [NSMutableString stringWithFormat:@"(%@)%@", key, [self nl_description]];
+  } else {
+    description = [self nl_description];
+  }
+  
+  return description;
+}
+
+- (void)setNl_key:(id)nl_key {
+  objc_setAssociatedObject(self, @selector(nl_key), nl_key, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id)nl_key {
+  return objc_getAssociatedObject(self, _cmd);
+}
+
 @end
 
 @implementation UIView (nl_Image)
 
 - (UIImage *)nl_screenshot {
-  UIGraphicsBeginImageContext(self.bounds.size);
-  [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-  UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-  return image;
+  UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, .0);
+  if ([self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES]) {
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+  }
+  
+  return nil;
 }
 
 @end

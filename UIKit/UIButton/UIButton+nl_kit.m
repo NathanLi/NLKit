@@ -58,7 +58,9 @@
 }
 
 - (void)setNl_backgroundImage:(UIImage *)nl_backgroundImage {
+  [self willChangeValueForKey:@"nl_backgroundImage"];
   [self setBackgroundImage:nl_backgroundImage forState:UIControlStateNormal];
+  [self didChangeValueForKey:@"nl_backgroundImage"];
 }
 
 - (UIImage *)nl_backgroundImageHighlighted {

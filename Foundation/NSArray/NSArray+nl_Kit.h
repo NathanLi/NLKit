@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "NSArray+nl_Functional.h"
+#import "NSMutableArray+nl_Kit.h"
 
 @interface NSArray (nl_Kit)
 

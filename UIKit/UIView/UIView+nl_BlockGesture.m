@@ -10,11 +10,12 @@
 #import "NSObject+nl_associatedObject.h"
 
 static char kActionHandlerTapBlockKey;
+static char kActionHandlerDoubleTagBlockKey;
 static char kActionHandlerLongPressBlockKey;
 
 @implementation UIView (nl_BlockGesture)
 
-- (void)nl_addTapActionWithBlock:(GestureActionBlock)block
+- (UITapGestureRecognizer *)nl_addTapActionWithBlock:(GestureActionBlock)block
 {
   UITapGestureRecognizer *gesture = [self nl_associatedValueForKey:_cmd];
   if (!gesture)
@@ -26,6 +27,8 @@ static char kActionHandlerLongPressBlockKey;
   
   [self nl_setAssociateCopyValue:block withKey:&kActionHandlerTapBlockKey];
   self.userInteractionEnabled = YES;
+  
+  return gesture;
 }
 
 - (void)nl_handleActionForTapGesture:(UITapGestureRecognizer*)gesture
@@ -40,11 +43,34 @@ static char kActionHandlerLongPressBlockKey;
   }
 }
 
-- (void)nl_addLongPressActionWithBlock:(GestureActionBlock)block
+- (UITapGestureRecognizer *)nl_addDoubleTapActionWithBlock:(GestureActionBlock)block {
+  UITapGestureRecognizer *gesture = [self nl_associatedValueForKey:_cmd];
+  if (!gesture) {
+    gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(nl_handleActionForDoubleTapGesture:)];
+    [gesture setNumberOfTapsRequired:2];
+    [self addGestureRecognizer:gesture];
+    [self nl_setAssociateValue:gesture withKey:_cmd];
+  }
+  
+  [self nl_setAssociateCopyValue:block withKey:&kActionHandlerDoubleTagBlockKey];
+  self.userInteractionEnabled = YES;
+  
+  return gesture;
+}
+
+- (void)nl_handleActionForDoubleTapGesture:(UITapGestureRecognizer*)gesture
 {
+  if (gesture.state == UIGestureRecognizerStateRecognized) {
+    GestureActionBlock block = [self nl_associatedValueForKey:&kActionHandlerDoubleTagBlockKey];
+    if (block) {
+      block(gesture);
+    }
+  }
+}
+
+- (UILongPressGestureRecognizer *)nl_addLongPressActionWithBlock:(GestureActionBlock)block {
   UILongPressGestureRecognizer *gesture = [self nl_associatedValueForKey:_cmd];
-  if (!gesture)
-  {
+  if (!gesture) {
     gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(nl_handleActionForLongPressGesture:)];
     [self addGestureRecognizer:gesture];
     [self nl_setAssociateValue:gesture withKey:_cmd];
@@ -52,15 +78,16 @@ static char kActionHandlerLongPressBlockKey;
   
   [self nl_setAssociateCopyValue:block withKey:&kActionHandlerLongPressBlockKey];
   self.userInteractionEnabled = YES;
+  
+  return gesture;
 }
 
 - (void)nl_handleActionForLongPressGesture:(UITapGestureRecognizer*)gesture
 {
-  if (gesture.state == UIGestureRecognizerStateRecognized)
+  if (gesture.state == UIGestureRecognizerStateBegan)
   {
     GestureActionBlock block = [self nl_associatedValueForKey:&kActionHandlerLongPressBlockKey];
-    if (block)
-    {
+    if (block) {
       block(gesture);
     }
   }

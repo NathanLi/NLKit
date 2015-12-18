@@ -57,6 +57,8 @@
  */
 - (BOOL)nl_lessThanVersion:(NSString *)newVersion;
 
+- (BOOL)nl_isEmpty;
+
 @end
 
 
@@ -94,5 +96,15 @@
  *  @return 文本所需高度
  */
 - (CGFloat)nl_heightWithWidth:(CGFloat)width font:(UIFont *)font;
+
+- (CGSize)nl_sizeWithLimitSize:(CGSize)size attributes:(NSDictionary *)attributes;
+
+@end
+
+@interface NSString (nl_extension)
+
+- (BOOL)nl_isGifExtension;
+- (BOOL)nl_isMP4Extension;
+- (BOOL)nl_isMovExtension;
 
 @end

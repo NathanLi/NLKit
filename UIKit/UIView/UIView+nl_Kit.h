@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIView+nl_BlockGesture.h"
 
 @interface UIView (NLLayer)
 
@@ -45,11 +46,26 @@
 @property (copy, nonatomic) BOOL (^nl_pointInsideBlock)(CGPoint point, UIEvent *event);
 
 /**
+ *  @brief  block for - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+ *      Note: write
+ *          return [self nl_hitTest:point withEvent:(UIEvent *)event];
+ *        at the end of block.
+ */
+@property (copy, nonatomic) UIView *(^nl_hitTestBlock)(CGPoint point, UIEvent *event);
+- (UIView *)nl_hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+
+
+/**
  *  @brief  当前本view下的获取了键盘焦点的view
  *
  *  @return 如果有subView获取了焦点，返回该view  否则返回YES
  */
 - (UIView *)nl_firstResponder;
+
+/**
+ *  @brief  在 `- despction` 里会用到的额外信息
+ */
+@property (nonatomic, strong) id nl_key;
 
 @end
 

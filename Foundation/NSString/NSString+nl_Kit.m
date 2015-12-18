@@ -52,6 +52,10 @@
   return [self compare:newVersion options:NSNumericSearch] == NSOrderedAscending;
 }
 
+- (BOOL)nl_isEmpty {
+  return self.length == 0;
+}
+
 @end
 
 @implementation NSString (nl_Size)
@@ -63,13 +67,41 @@
 }
 
 - (CGSize)nl_sizeWithLimitSize:(CGSize)size font:(UIFont *)font {
-  if ([self length] == 0) return CGSizeZero;
-  
-  return [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: font} context:nil].size;
+  return [self nl_sizeWithLimitSize:size attributes:@{NSFontAttributeName: font}];
 }
 
 - (CGFloat)nl_heightWithWidth:(CGFloat)width font:(UIFont *)font {
   return [self nl_sizeWithLimitSize:CGSizeMake(width, MAXFLOAT) font:font].height;
+}
+
+- (CGSize)nl_sizeWithLimitSize:(CGSize)size attributes:(NSDictionary *)attributes {
+  if ([self length] == 0) return CGSizeZero;
+  
+  return [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+}
+
+@end
+
+@implementation NSString (nl_extension)
+
+- (BOOL)nl_isGifExtension {
+  NSString *extension = [self pathExtension];
+  BOOL isPicGif = [extension caseInsensitiveCompare:@"gif"] == NSOrderedSame;
+  
+  return isPicGif;
+}
+- (BOOL)nl_isMP4Extension {
+  NSString *extension = [self pathExtension];
+  BOOL isMP4 = [extension caseInsensitiveCompare:@"mp4"] == NSOrderedSame;
+  
+  return isMP4;
+}
+
+- (BOOL)nl_isMovExtension {
+  NSString *extension = [self pathExtension];
+  BOOL isMov = [extension caseInsensitiveCompare:@"mov"] == NSOrderedSame;
+  
+  return isMov;
 }
 
 @end

@@ -15,6 +15,7 @@
 - (void)nl_insertImage:(UIImage *)image atIndex:(NSUInteger)index height:(CGFloat)height;
 - (void)nl_insertImage:(UIImage *)image atIndex:(NSUInteger)index size:(CGSize)size;
 - (void)nl_insertImage:(UIImage *)image atIndex:(NSUInteger)index frame:(CGRect)frame;
+- (void)nl_insertImage:(UIImage *)image atIndex:(NSUInteger)index;
 
 - (UIFont *)nl_font;
 

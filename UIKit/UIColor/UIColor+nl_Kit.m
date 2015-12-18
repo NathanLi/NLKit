@@ -10,4 +10,8 @@
 
 @implementation UIColor (nl_Kit)
 
++ (UIColor *)nl_buttonSystemTypeColor {
+  return [UIColor nl_colorWithHex:0x007AFF];
+}
+
 @end

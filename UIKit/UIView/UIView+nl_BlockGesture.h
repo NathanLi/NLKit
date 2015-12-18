@@ -12,7 +12,8 @@ typedef void (^GestureActionBlock)(UIGestureRecognizer *gestureRecoginzer);
 
 @interface UIView (nl_BlockGesture)
 
-- (void)nl_addTapActionWithBlock:(GestureActionBlock)block;
-- (void)nl_addLongPressActionWithBlock:(GestureActionBlock)block;
+- (UITapGestureRecognizer *)nl_addTapActionWithBlock:(GestureActionBlock)block;
+- (UITapGestureRecognizer *)nl_addDoubleTapActionWithBlock:(GestureActionBlock)block;
+- (UILongPressGestureRecognizer *)nl_addLongPressActionWithBlock:(GestureActionBlock)block;
 
 @end
