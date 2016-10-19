@@ -16,13 +16,13 @@
 
 + (int)nl_ageWithDateOfBirth:(NSDate *)date {
   // 出生日期转换 年月日
-  NSDateComponents *components1 = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
+  NSDateComponents *components1 = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
   NSInteger brithDateYear  = [components1 year];
   NSInteger brithDateDay   = [components1 day];
   NSInteger brithDateMonth = [components1 month];
   
   // 获取系统当前 年月日
-  NSDateComponents *components2 = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+  NSDateComponents *components2 = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
   NSInteger currentDateYear  = [components2 year];
   NSInteger currentDateDay   = [components2 day];
   NSInteger currentDateMonth = [components2 month];
@@ -38,7 +38,7 @@
 
 + (NSString *)nl_constellationWithTime:(NSTimeInterval)time {
   NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
-  NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
+  NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
   NSInteger day   = [components day];
   NSInteger month = [components month];
   

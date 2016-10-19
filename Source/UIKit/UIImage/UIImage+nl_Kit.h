@@ -83,7 +83,7 @@
 /**
  *  @brief  根据本图生成一张带有圆角新的图片
  *
- *  @param cornerRound 要生成的新和图片的圆角
+ *  @param cornerRadius 要生成的新和图片的圆角
  *
  *  @return 新图
  */
