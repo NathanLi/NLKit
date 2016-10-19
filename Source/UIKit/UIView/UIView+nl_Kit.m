@@ -7,9 +7,20 @@
 //
 
 #import "UIView+nl_Kit.h"
+#import "NSObject+nl_Kit.h"
+#import "NSObject+nl_associatedObject.h"
 #import <objc/runtime.h>
 
 @implementation UIView (NLLayer)
+
+- (void)setNl_cornerRadius:(CGFloat)nl_cornerRadius {
+  self.layer.cornerRadius = nl_cornerRadius;
+  self.layer.masksToBounds = YES;
+}
+
+- (CGFloat)nl_cornerRadius {
+  return self.layer.cornerRadius;
+}
 
 - (void)setRound:(CGFloat)round {
   self.layer.cornerRadius = round;
@@ -205,7 +216,7 @@
 -(void)setNl_right:(CGFloat)nl_right
 {
   CGRect frame = self.frame;
-  frame.size.width = MAX(nl_right-self.nl_left, 0);
+  frame.origin.x = nl_right - frame.size.width;
   self.frame = frame;
 }
 
@@ -219,7 +230,7 @@
 -(void)setNl_bottom:(CGFloat)nl_bottom
 {
   CGRect frame = self.frame;
-  frame.size.height = MAX(nl_bottom-self.nl_top, 0);
+  frame.origin.y = nl_bottom - frame.size.height;
   self.frame = frame;
 }
 
@@ -332,6 +343,14 @@ static void *nl_pointInsideBlockKey = &nl_pointInsideBlockKey;
   return objc_getAssociatedObject(self, _cmd);
 }
 
++ (instancetype)nl_viewWithBuildBlock:(void (^)(__kindof UIView *))buildBlock {
+  UIView *view = [[self alloc] initWithFrame:CGRectZero];
+  if (buildBlock) {
+    buildBlock(view);
+  }
+  return view;
+}
+
 @end
 
 @implementation UIView (nl_Image)
@@ -345,6 +364,46 @@ static void *nl_pointInsideBlockKey = &nl_pointInsideBlockKey;
   }
   
   return nil;
+}
+
+@end
+
+
+
+@implementation UIView (nl_DEBUG)
+
+- (void)_nl_setNeedsLayout_MainThreadCheck {
+  if (![NSThread isMainThread]) {
+    [self _nl_methodCalledNotFromMainThread:NSStringFromSelector(_cmd)];
+  }
+  
+  [self _nl_setNeedsLayout_MainThreadCheck];
+}
+
+- (void)_nl_setNeedsDisplay_MainThreadCheck {
+  if (![NSThread isMainThread]) {
+    [self _nl_methodCalledNotFromMainThread:NSStringFromSelector(_cmd)];
+  }
+  
+  [self _nl_setNeedsDisplay_MainThreadCheck];
+}
+
+- (void)_nl_setNeedsDisplayInRect_MainThreadCheck:(CGRect)rect {
+  if (![NSThread isMainThread]) {
+    [self _nl_methodCalledNotFromMainThread:NSStringFromSelector(_cmd)];
+  }
+  
+  [self _nl_setNeedsDisplayInRect_MainThreadCheck:rect];
+}
+
+- (void)_nl_methodCalledNotFromMainThread:(NSString *)methodName {
+  NSLog(@"-[%@ %@] being called on background queue. Break on %s to find out where", NSStringFromClass([self class]), methodName, __PRETTY_FUNCTION__);
+}
+
++ (void)nl_toggleViewMainThreadChecking {
+  [UIView nl_swizzleMethod:@selector(setNeedsLayout) withMethod:@selector(_nl_setNeedsLayout_MainThreadCheck)];
+  [UIView nl_swizzleMethod:@selector(setNeedsDisplay) withMethod:@selector(_nl_setNeedsDisplay_MainThreadCheck)];
+  [UIView nl_swizzleMethod:@selector(setNeedsDisplayInRect:) withMethod:@selector(_nl_setNeedsDisplayInRect_MainThreadCheck:)];
 }
 
 @end

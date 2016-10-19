@@ -13,6 +13,7 @@
  */
 @interface UITextView (nl_Placeholder)
 
+@property (nonatomic, assign) CGPoint nl_placeholderOrigin;  // 占位符位置
 @property (strong, nonatomic) NSString *nl_placeholder;      // 占位符文字
 @property (strong, nonatomic) UIColor  *nl_placeholderColor; // 占位符颜色
 @property (strong, nonatomic) UIFont   *nl_placeholderFont;  // 占位符字体

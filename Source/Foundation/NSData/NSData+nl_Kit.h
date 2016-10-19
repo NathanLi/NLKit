@@ -17,4 +17,6 @@
  */
 - (BOOL)nl_isGifData;
 
+- (NSString *)nl_base64ToString;
+
 @end

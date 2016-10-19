@@ -9,8 +9,55 @@
 #import "UITextField+nl_Kit.h"
 #import <objc/runtime.h>
 #import "NLInputAccessoryView.h"
+#import "NSObject+nl_Kit.h"
 
 @implementation UITextField (nl_Kit)
+
+
++ (void)load {
+  Method textRectForBounds = class_getInstanceMethod(self, @selector(textRectForBounds:));
+  Method nl_textRectForBounds = class_getInstanceMethod(self, @selector(_nl_textRectForBounds:));
+  
+  Method editingRectForBounds = class_getInstanceMethod(self, @selector(editingRectForBounds:));
+  Method nl_editingRectForBounds = class_getInstanceMethod(self, @selector(_nl_editingRectForBounds:));
+  
+  if (textRectForBounds && nl_textRectForBounds && editingRectForBounds && nl_editingRectForBounds) {
+    method_exchangeImplementations(textRectForBounds, nl_textRectForBounds);
+    method_exchangeImplementations(editingRectForBounds, nl_editingRectForBounds);
+  }
+}
+
+- (CGRect (^)(CGRect))nl_textRectForBoundsBlock {
+  return [self nl_associatedValueForKey:_cmd];
+}
+
+- (void)setNl_textRectForBoundsBlock:(CGRect (^)(CGRect))nl_textRectForBoundsBlock {
+  [self nl_setAssociateCopyValue:nl_textRectForBoundsBlock withKey:@selector(nl_textRectForBoundsBlock)];
+}
+
+- (CGRect)_nl_textRectForBounds:(CGRect)bounds {
+  if (self.nl_textRectForBoundsBlock) {
+    return self.nl_textRectForBoundsBlock(bounds);
+  }
+  
+  return [self _nl_textRectForBounds:bounds];
+}
+
+- (CGRect)_nl_editingRectForBounds:(CGRect)bounds {
+  if (self.nl_textRectForBoundsBlock) {
+    return self.nl_textRectForBoundsBlock(bounds);
+  }
+  
+  return [self _nl_editingRectForBounds:bounds];
+}
+
++ (instancetype _Nonnull)nl_textField:(void (^_Nullable)(UITextField *_Nonnull))block {
+  UITextField *textFiled = [[self alloc] initWithFrame:CGRectZero];
+  if (block) {
+    block(textFiled);
+  }
+  return textFiled;
+}
 
 @end
 

@@ -12,5 +12,6 @@
 @interface UIColor (nl_Kit)
 
 + (UIColor *)nl_buttonSystemTypeColor;
++ (UIColor *)nl_tableViewCellSeparatorColor;
 
 @end

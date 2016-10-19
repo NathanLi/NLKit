@@ -27,4 +27,24 @@
  */
 - (NSUInteger)nl_sizeInstance;
 
+/**
+ *  @brief Method swizzle
+ *
+ *  @param selector original selector.
+ *  @param otherSelector exchange selector.
+ *
+ *  @return YES if sizzle successed. NO otherwise.
+ */
++ (BOOL)nl_swizzleMethod:(SEL)selector withMethod:(SEL)otherSelector;
+
+/**
+ *  @brief Swizzle class method.
+ *
+ *  @param selector      original slector.
+ *  @param otherSelector exchange selector.
+ *
+ *  @return YES if sizzle successed. NO otherwise.
+ */
++ (BOOL)nl_swizzleClassMethod:(SEL)selector withMethod:(SEL)otherSelector;
+
 @end

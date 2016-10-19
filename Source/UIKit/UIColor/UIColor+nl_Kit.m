@@ -14,4 +14,8 @@
   return [UIColor nl_colorWithHex:0x007AFF];
 }
 
++ (UIColor *)nl_tableViewCellSeparatorColor {
+  return [UIColor colorWithRed:0.783922 green:0.780392 blue:0.8 alpha:1.0];
+}
+
 @end

@@ -73,6 +73,19 @@ static NSString *const kHoomicNotificationDidChangeTextView = @"kHoomicNotificat
   }
 }
 
+- (void)setNl_placeholderOrigin:(CGPoint)nl_placeholderOrigin {
+  objc_setAssociatedObject(self, @selector(nl_placeholderOrigin), [NSValue valueWithCGPoint:nl_placeholderOrigin], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGPoint)nl_placeholderOrigin {
+  NSValue *origin = objc_getAssociatedObject(self, _cmd);
+  if (origin) {
+    return [origin CGPointValue];
+  }
+  
+  return CGPointMake(6.0, 7.5);
+}
+
 - (void)setNl_placeholder:(NSString *)nl_placeholder {
   [self.nl_lblPlaceholder setText:nl_placeholder];
   
@@ -122,9 +135,11 @@ static NSString *const kHoomicNotificationDidChangeTextView = @"kHoomicNotificat
     [self insertSubview:lblPlaceholder atIndex:0];
     
     lblPlaceholder.translatesAutoresizingMaskIntoConstraints = NO;
-    NSArray *constraintVs = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-7.5-[lblPlaceholder]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lblPlaceholder)];
+    NSString *visualV = [NSString stringWithFormat:@"V:|-%f-[lblPlaceholder]", self.nl_placeholderOrigin.y];
+    NSArray *constraintVs = [NSLayoutConstraint constraintsWithVisualFormat:visualV options:0 metrics:nil views:NSDictionaryOfVariableBindings(lblPlaceholder)];
     
-    NSArray *constraintHs = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-6-[lblPlaceholder]-6-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(lblPlaceholder)];
+    NSString *visualH = [NSString stringWithFormat:@"H:|-%f-[lblPlaceholder]-%f-|", self.nl_placeholderOrigin.x, self.nl_placeholderOrigin.x];
+    NSArray *constraintHs = [NSLayoutConstraint constraintsWithVisualFormat:visualH options:0 metrics:nil views:NSDictionaryOfVariableBindings(lblPlaceholder)];
     [self addConstraints:constraintHs];
     [self addConstraints:constraintVs];
     

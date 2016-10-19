@@ -7,12 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIImage+Color.h"
 
 @interface UIImage (nl_Kit)
+
+/**
+ *  @brief 可以用于关联 data 数据
+ */
+@property (nonatomic, strong) NSData *nl_imageData;
 
 - (UIImage *)nl_drawText:(NSString *)text;
 - (UIImage *)nl_drawText:(NSString *)text inRect:(CGRect)rect;
 - (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inRect:(CGRect)rect;
+- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font;
 
 /**
  *  @brief  创建并返回一张新的图像对象，并且该图像可以中心点为复制点进行拉伸
@@ -69,6 +76,7 @@
  *  @return 新图片
  */
 - (UIImage *)nl_resizeWithSize:(CGSize)size;
+- (UIImage *)nl_resizeWithScale:(CGFloat)scale;
 
 /**
  *  @brief  根据本图生成一张新的图片
@@ -91,5 +99,18 @@
 - (UIImage *)nl_drawWithCornerRadius:(CGFloat)cornerRadius size:(CGSize)size;
 - (UIImage *)nl_drawWithCornerRadius:(CGFloat)cornerRadius size:(CGSize)size borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor;
 
+/**
+ *  @brief 计算图片所占内存大小
+ *
+ *  @return 图片大小
+ */
+- (NSUInteger)nl_calculatedSize;
+
+/**
+ *  @brief 获取类似于UITableViewCell 中的 disclosure indicator 图
+ *
+ *  @return 图片
+ */
++ (UIImage *)nl_cellAccessoryDisclosureIndicatorImage;
 
 @end

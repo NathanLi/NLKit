@@ -47,6 +47,22 @@
   return [self nl_sizeAllKeys] + [self nl_sizeAllValues];
 }
 
+- (NSData *)nl_toJsonData {
+  NSError *error = nil;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
+  return error == nil ? jsonData : nil;
+}
+
+- (NSString *)nl_toJsonString {
+  NSData *data = [self nl_toJsonData];
+  
+  if (data == nil) {
+    return nil;
+  }
+  
+  return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
 @end
 
 @implementation NSMutableDictionary (nl_SafeAccessory)

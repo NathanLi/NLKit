@@ -18,9 +18,14 @@ typedef objc_property_t Property;
 }
 
 + (NSArray *)propertyKeys {
+  NSMutableArray *keys = objc_getAssociatedObject(self, _cmd);
+  if (keys) {
+    return keys;
+  }
+  
   unsigned int count;
   Property *properties = class_copyPropertyList(self, &count);
-  NSMutableArray  *keys = [[NSMutableArray alloc] initWithCapacity:count];
+  keys = [[NSMutableArray alloc] initWithCapacity:count];
   
   for (int index = 0; index < count; ++index) {
     Property property = properties[index];
@@ -34,11 +39,13 @@ typedef objc_property_t Property;
   Class superClass = class_getSuperclass(self);
   if ([self isContainParentPropertyInReflex]) {
     const char *superName = class_getName(superClass);
-    if (strcmp(superName, class_getName([NSObject class]))) {
+    if (strcmp(superName, class_getName([NSObject class])) != 0) {
       NSArray *superKeys = [superClass propertyKeys];
       [keys addObjectsFromArray:superKeys];
     }
   }
+  
+  objc_setAssociatedObject(self, _cmd, keys, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
   
   return keys;
 }
@@ -55,6 +62,10 @@ typedef objc_property_t Property;
 }
 
 + (NSMutableArray  *)arrayFromDictionaries:(NSArray*)array {
+  if (![array isKindOfClass:[NSArray class]]) {
+    return nil;
+  }
+  
   NSMutableArray *objs = [[NSMutableArray alloc] initWithCapacity:0];
   [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
     id model = [self objectFromDataSource:obj];
@@ -93,6 +104,10 @@ typedef objc_property_t Property;
 }
 
 - (int)copyFromDataSouce:(NSObject *)dataSource ignoreEqualValue:(BOOL)ignore {
+  if (dataSource == nil) {
+    return 0;
+  }
+  
   int count = 0;
   
   for (NSString *key in [self.class propertyKeys]) {
@@ -124,6 +139,39 @@ typedef objc_property_t Property;
   return count;
 }
 
+- (int)changeFromDataSouce:(NSObject *)dataSource {
+  int count = 0;
+  
+  for (NSString *key in [self.class propertyKeys]) {
+    BOOL isProperty = NO;
+    if ([dataSource isKindOfClass:[NSDictionary class]]) {
+      isProperty = ([dataSource valueForKey:key] == nil) ? NO : YES;
+    } else {
+      isProperty = [dataSource respondsToSelector:NSSelectorFromString(key)];
+    }
+    
+    if (isProperty) {
+      id propertyValue = [dataSource valueForKey:key];
+      id thisPropertyValue = [self valueForKey:key];
+      thisPropertyValue = thisPropertyValue ? thisPropertyValue : @"";
+      // 如果有值
+      if (![propertyValue isKindOfClass:[NSNull class]] && propertyValue != nil) {
+        // 是否忽略相同的值
+        
+        if ([thisPropertyValue isEqual:propertyValue]) {
+          continue;
+        } else {
+          count++;
+        }
+        
+      }
+    }
+  }
+  
+  return count;
+}
+
+
 - (NSDictionary *)dictionary {
   return [self dictionaryIgnoreEmptyValue:NO];
 }
@@ -132,6 +180,13 @@ typedef objc_property_t Property;
   NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:0];
   NSArray *keys = [self.class propertyKeys];
   for (NSString *key in keys) {
+    if (![self respondsToSelector:NSSelectorFromString(key)]) {
+#ifdef DEBUG
+      NSLog(@"%@ 没有 getter 方法:%@", self, key);
+#endif
+      continue;
+    }
+    
     NSObject *value = [self valueForKey:key];
     if (value != nil) {
       [dic setObject:value forKey:key];
@@ -151,6 +206,14 @@ typedef objc_property_t Property;
   NSMutableDictionary *dic = [NSMutableDictionary dictionary];
   NSArray *keys = [self.class propertyKeys];
   for (NSString *key in keys) {
+    if (![self respondsToSelector:NSSelectorFromString(key)]) {
+#ifdef DEBUG
+      NSLog(@"%@ 没有 getter 方法:%@", self, key);
+#endif
+      continue;
+    }
+    
+    
     NSObject *selfValue = [self valueForKey:key];
     NSObject *otherValue = [object valueForKey:key];
     

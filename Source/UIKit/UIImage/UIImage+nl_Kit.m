@@ -7,9 +7,19 @@
 //
 
 #import "UIImage+nl_Kit.h"
+#import "UIColor+nl_Hex.h"
 #import "CGRect+Additions.h"
+#import "NSObject+nl_Kit.h"
 
 @implementation UIImage (nl_Kit)
+
+- (NSData *)nl_imageData {
+  return [self nl_associatedValueForKey:_cmd];
+}
+
+- (void)setNl_imageData:(NSData *)nl_imageData {
+  [self nl_setAssociateValue:nl_imageData withKey:@selector(nl_imageData)];
+}
 
 - (UIImage *)nl_resizeWithSize:(CGSize)size {
   UIGraphicsBeginImageContextWithOptions(size, NO, 0);
@@ -19,12 +29,22 @@
    return newImage;
 }
 
+- (UIImage *)nl_resizeWithScale:(CGFloat)scale {
+  CGFloat width = self.size.width * scale;
+  CGFloat height = self.size.height * scale;
+  return [self nl_resizeWithSize:CGSizeMake(width, height)];
+}
+
 - (UIImage *)nl_drawText:(NSString *)text {
   return [self nl_drawText:text inRect:CGRectMake(0, 0, self.size.width, self.size.height)];
 }
 
 - (UIImage *)nl_drawText:(NSString *)text inRect:(CGRect)rect {
   return [self nl_drawText:text font:[UIFont systemFontOfSize:[UIFont labelFontSize]] inRect:rect];
+}
+
+- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font {
+  return [self nl_drawText:text font:font inRect:CGRectMake(0, 0, self.size.width, self.size.height)];
 }
 
 - (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inRect:(CGRect)rect {
@@ -215,6 +235,45 @@
   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
   return newImage;
+}
+
+- (NSUInteger)nl_calculatedSize {
+  return CGImageGetHeight(self.CGImage) * CGImageGetBytesPerRow(self.CGImage);
+}
+
++ (UIImage *)nl_cellAccessoryDisclosureIndicatorImage {
+  static UIImage *image = nil;
+  
+  if (!image) {
+    CGSize sizeImage = CGSizeMake(8, 13.0);
+    UIGraphicsBeginImageContextWithOptions(sizeImage, NO, .0);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    __nl_DrawDisclosureIndicator(context, sizeImage);
+    
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+  }
+  
+  return image;
+}
+
+// Draws a disclosure indicator such that the tip of the arrow is at (x,y)
+void __nl_DrawDisclosureIndicator(CGContextRef ctxt, CGSize size) {
+  static const CGFloat W = 1.5; // line width
+  
+  CGFloat x = size.width - W;
+  CGFloat y = size.height / 2.0;
+  
+  CGContextSaveGState(ctxt);
+  CGContextMoveToPoint(ctxt, .0, .0);
+  CGContextAddLineToPoint(ctxt, x, y);
+  CGContextAddLineToPoint(ctxt, .0, size.height);
+  CGContextSetLineWidth(ctxt, W);
+  [[UIColor nl_colorWithHex:0xCACACA] set];
+  CGContextStrokePath(ctxt);
+  CGContextRestoreGState(ctxt);
 }
 
 @end

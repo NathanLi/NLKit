@@ -56,6 +56,54 @@
   return self.length == 0;
 }
 
++ (NSString *)nl_formatWithFileSize:(long long)fileSize {
+  return [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleBinary];
+}
+
+- (NSDictionary<NSString *,id> *)nl_URLParameterDictionary {
+  NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+  
+  if (self.length && [self rangeOfString:@"="].location != NSNotFound) {
+    NSArray *keyValuePairs = [self componentsSeparatedByString:@"&"];
+    for (NSString *keyValuePair in keyValuePairs) {
+      NSArray *pair = [keyValuePair componentsSeparatedByString:@"="];
+      // don't assume we actually got a real key=value pair. start by assuming we only got @[key] before checking count
+      NSString *paramValue = pair.count == 2 ? pair[1] : @"";
+      // CFURLCreateStringByReplacingPercentEscapesUsingEncoding may return NULL
+      parameters[pair[0]] = [paramValue nl_URLDecodedString] ?: @"";
+    }
+  }
+  
+  return parameters;
+}
+
+- (NSString *)nl_addParameters:(NSDictionary<NSString *,id> *)parameters {
+  NSString *originString = [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+  NSMutableString *result = [NSMutableString stringWithString:originString];
+  [parameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+    key = [key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    if ([obj isKindOfClass:[NSString class]]) {
+      obj = [obj stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    }
+    if ([result nl_isContainString:@"?"]) {
+      [result appendFormat:@"&%@=%@", key, obj];
+    } else {
+      [result appendFormat:@"?%@=%@", key, obj];
+    }
+  }];
+  
+  return result;
+}
+
+- (NSString *)nl_URLDecodedString {
+  NSString *input = [self stringByReplacingOccurrencesOfString:@"+" withString:@" " options:NSLiteralSearch range:NSMakeRange(0, self.length)];
+  return [input stringByRemovingPercentEncoding];
+}
+
+- (long)longValue {
+  return [self integerValue];
+}
+
 @end
 
 @implementation NSString (nl_Size)
@@ -71,13 +119,16 @@
 }
 
 - (CGFloat)nl_heightWithWidth:(CGFloat)width font:(UIFont *)font {
-  return [self nl_sizeWithLimitSize:CGSizeMake(width, MAXFLOAT) font:font].height;
+  return ceilf([self nl_sizeWithLimitSize:CGSizeMake(width, MAXFLOAT) font:font].height);
 }
 
 - (CGSize)nl_sizeWithLimitSize:(CGSize)size attributes:(NSDictionary *)attributes {
   if ([self length] == 0) return CGSizeZero;
   
-  return [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+  CGSize stringSize = [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil].size;
+  stringSize.width = ceilf(stringSize.width);
+  stringSize.height = ceilf(stringSize.height);
+  return stringSize;
 }
 
 @end

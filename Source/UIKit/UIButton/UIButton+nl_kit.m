@@ -7,8 +7,32 @@
 //
 
 #import "UIButton+nl_kit.h"
+#import "UIView+nl_Kit.h"
 
 @implementation UIButton (nl_kit)
+
+- (void)nl_resolveSystemEdgeUnhighlighted {
+  __weak typeof(self) weakSelf = self;
+  [self setNl_pointInsideBlock:^BOOL(CGPoint point, UIEvent *event) {
+    __strong typeof(weakSelf) self = weakSelf;
+    BOOL inside = CGRectContainsPoint(self.bounds, point);
+    if (inside && !self.isHighlighted && event.type == UIEventTypeTouches) {
+      self.highlighted = YES;
+    }
+    
+    return inside;
+  }];
+}
+
++ (instancetype)nl_buttonWithBuildBlock:(void (^)(__kindof UIButton *))buildBlock {
+  UIButton *button = [self buttonWithType:UIButtonTypeCustom];
+  
+  if (buildBlock) {
+    buildBlock(button);
+  }
+  
+  return button;
+}
 
 - (void)setNl_image:(UIImage *)nl_image {
   /**
@@ -35,6 +59,17 @@
   [self setTitle:nl_title forState:UIControlStateNormal];
   self.enabled = shouldEnable;
 
+}
+
+- (void)setNl_titleColor:(UIColor *)nl_titleColor {
+  BOOL shouldEnable = self.enabled;
+  self.enabled = YES;
+  [self setTitleColor:nl_titleColor forState:UIControlStateNormal];
+  self.enabled = shouldEnable;
+}
+
+- (UIColor *)nl_titleColor {
+  return [self titleColorForState:UIControlStateNormal];
 }
 
 - (void)setNl_titleHighlighted:(NSString *)nl_titleHighlighted {
@@ -70,6 +105,9 @@
 - (void)setNl_backgroundImageHighlighted:(UIImage *)nl_backgroundImageHighlighted {
   [self setBackgroundImage:nl_backgroundImageHighlighted forState:UIControlStateHighlighted];
 }
+
+- (UIFont *)nl_font {return self.titleLabel.font;}
+- (void)setNl_font:(UIFont *)nl_font {self.titleLabel.font = nl_font;}
 
 @end
 

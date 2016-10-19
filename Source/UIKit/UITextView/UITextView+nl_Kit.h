@@ -21,3 +21,21 @@
 @property (assign, nonatomic) BOOL nl_showInputAccessoryView; // 自动展示NLInputAccessoryView工具条
 
 @end
+
+
+@interface UITextView (nl_range)
+
+/**
+ *  @brief 当前所选择 range （可以用来定位渔村）
+ *
+ *  @return range
+ */
+- (NSRange)nl_selectedRange;
+
+/**
+ *  @brief 设置文本选择 range   
+ *         self 必须为第一响应者才有效
+ */
+- (void)setNl_selectedRange:(NSRange)range;
+
+@end

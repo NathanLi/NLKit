@@ -32,14 +32,14 @@
 }
 
 - (UIImage *)setBackgroundImageWithColor:(UIColor *)color forState:(UIControlState)state {
-  UIImage *image = [UIImage imageWithColor:color];
+  UIImage *image = [UIImage nl_imageWithColor:color];
   [self setBackgroundImage:image forState:state];
   
   return image;
 }
 
 - (UIImage *)setImageWithColor:(UIColor *)color forState:(UIControlState)state {
-  UIImage *image = [UIImage imageWithColor:color];
+  UIImage *image = [UIImage nl_imageWithColor:color];
   [self setImage:image forState:state];
   
   return image;

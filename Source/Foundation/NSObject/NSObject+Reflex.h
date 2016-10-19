@@ -41,6 +41,12 @@
 - (int)copyFromDataSouce:(NSObject *)dataSource;
 - (int)copyFromDataSouce:(NSObject *)dataSource ignoreEqualValue:(BOOL)ignore;
 
+/**
+ *  比较和dataSource中的值， 有多少个不同,属性不能为nil
+ * @return 返回不用值得属性的总个数
+ */
+- (int)changeFromDataSouce:(NSObject *)dataSource;
+
 // 将对象转换为一个dictionary
 - (NSDictionary *)dictionary;
 // 将对象转换为一个dictionary，并将为nil的值忽略（不会忽略为0的值）

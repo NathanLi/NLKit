@@ -11,22 +11,27 @@
 
 @interface UIView (NLLayer)
 
+/**
+ *  @brief 视图圆角
+ */
+@property (nonatomic, assign) CGFloat nl_cornerRadius;
+
 @property (nonatomic, assign) CGFloat round;   // view round
 @property (nonatomic, assign) CGFloat borderWidth;
-@property (nonatomic, assign) UIColor *borderColor;
+@property (nonatomic, assign) UIColor *_Nullable borderColor;
 
-@property (nonatomic, assign) UIColor *nl_shadowColor;
+@property (nonatomic, assign) UIColor *_Nullable nl_shadowColor;
 @property (nonatomic, assign) CGFloat nl_shadowRadius;
 @property (assign, nonatomic) CGSize nl_shadowOffset;
 @property (assign, nonatomic) CGFloat nl_shadowOpacity;
 
-- (void)setBorderWith:(CGFloat)width color:(UIColor *)color;
+- (void)setBorderWith:(CGFloat)width color:(UIColor *_Nullable)color;
 
-- (void)nl_setBorderWith:(CGFloat)width color:(UIColor *)color top:(BOOL)top left:(BOOL)left bottom:(BOOL)bottom right:(BOOL)right;
-- (void)nl_setTopBorderWith:(CGFloat)width color:(UIColor *)color;
-- (void)nl_setLeftBorderWith:(CGFloat)width color:(UIColor *)color;
-- (void)nl_setBottomBorderWith:(CGFloat)width color:(UIColor *)color;
-- (void)nl_setRightBorderWith:(CGFloat)width color:(UIColor *)color;
+- (void)nl_setBorderWith:(CGFloat)width color:(UIColor *_Nullable)color top:(BOOL)top left:(BOOL)left bottom:(BOOL)bottom right:(BOOL)right;
+- (void)nl_setTopBorderWith:(CGFloat)width color:(UIColor *_Nullable)color;
+- (void)nl_setLeftBorderWith:(CGFloat)width color:(UIColor *_Nullable)color;
+- (void)nl_setBottomBorderWith:(CGFloat)width color:(UIColor *_Nullable)color;
+- (void)nl_setRightBorderWith:(CGFloat)width color:(UIColor *_Nullable)color;
 @end
 
 @interface UIView (NL_Frame)
@@ -43,7 +48,7 @@
 
 @interface UIView (nl_Kit)
 
-@property (copy, nonatomic) BOOL (^nl_pointInsideBlock)(CGPoint point, UIEvent *event);
+@property (copy, nonatomic) BOOL (^_Nullable nl_pointInsideBlock)(CGPoint point, UIEvent *_Nonnull event);
 
 /**
  *  @brief  block for - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
@@ -51,8 +56,8 @@
  *          return [self nl_hitTest:point withEvent:(UIEvent *)event];
  *        at the end of block.
  */
-@property (copy, nonatomic) UIView *(^nl_hitTestBlock)(CGPoint point, UIEvent *event);
-- (UIView *)nl_hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+@property (copy, nonatomic) UIView *_Nullable (^_Nullable nl_hitTestBlock)(CGPoint point, UIEvent *_Nonnull event);
+- (UIView *_Nullable)nl_hitTest:(CGPoint)point withEvent:(UIEvent *_Nonnull)event;
 
 
 /**
@@ -60,13 +65,21 @@
  *
  *  @return 如果有subView获取了焦点，返回该view  否则返回YES
  */
-- (UIView *)nl_firstResponder;
+- (UIView *_Nullable)nl_firstResponder;
 
 /**
  *  @brief  在 `- despction` 里会用到的额外信息
  */
-@property (nonatomic, strong) id nl_key;
+@property (nonatomic, strong) id _Nullable nl_key;
 
+/**
+ *  @brief 类工厂方法。
+ *
+ *  @param buildBlock 实例构建后会调用的 block
+ *
+ *  @return 新建后的实例
+ */
++ (instancetype _Nonnull)nl_viewWithBuildBlock:(void (^ _Nullable)(__kindof UIView *_Nonnull view))buildBlock;
 @end
 
 
@@ -77,6 +90,16 @@
  *
  *  @return 截图后的UIImage
  */
-- (UIImage *)nl_screenshot;
+- (UIImage *_Nullable)nl_screenshot;
+
+@end
+
+
+@interface UIView (nl_DEBUG)
+
+/**
+ *  @brief 开启 view 的绘制线程检测，当不在主线程进行绘制时，将会有相应的log信息
+ */
++ (void)nl_toggleViewMainThreadChecking;
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray (nl_Functional)
+@interface NSArray<ObjectType> (nl_Functional)
 
 /**
  *  @brief  将本数组里的每一个对象映射成一个另一个对象，并保存到新的数组中
@@ -17,7 +17,7 @@
  *
  *  @return 映射好的新的数组。可能为nil
  */
-- (NSArray *)nl_map:(id(^)(id object))block;
+- (NSArray *)nl_map:(id(^)(ObjectType object))block;
 
 /**
  *  @brief  对数组进行过滤
@@ -27,7 +27,7 @@
  *
  *  @return 新的过滤后的数组。可能为nil
  */
-- (NSArray *)nl_filter:(BOOL(^)(id object))block;
+- (NSArray<ObjectType> *)nl_filter:(BOOL(^)(ObjectType object))block;
 
 /**
  *  @brief  返回这样的结果：重复对`combineBlock`进行调用，该block的第一个参数，是`initValue`，第二个参数是`self`中的按顺序的每一个
@@ -39,7 +39,7 @@
  *
  *  @return 联合计算的值
  */
-- (id)nl_reduce:(id)initValue combine:(id (^)(id value, id each))combineBlock;
+- (id)nl_reduce:(id)initValue combine:(id (^)(id value, ObjectType each))combineBlock;
 
 /**
  *  @brief  A Array containing the elements of `self` in reverse order

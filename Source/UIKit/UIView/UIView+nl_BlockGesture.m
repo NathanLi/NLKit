@@ -33,7 +33,7 @@ static char kActionHandlerLongPressBlockKey;
 
 - (void)nl_handleActionForTapGesture:(UITapGestureRecognizer*)gesture
 {
-  if (gesture.state == UIGestureRecognizerStateRecognized)
+  if (gesture.state == UIGestureRecognizerStateEnded)
   {
     GestureActionBlock block = [self nl_associatedValueForKey:&kActionHandlerTapBlockKey];
     if (block)

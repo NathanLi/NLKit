@@ -26,7 +26,7 @@
  *
  *  @return 文本显示所需size
  */
-- (CGSize)nl_sizeWithText:(NSString *)text;
+- (CGSize)nl_sizeWithText:(NSString * _Nonnull )text;
 
 /**
  *  @brief  获取本label中的文本显示所需size
@@ -43,7 +43,7 @@
  *
  *  @return 文本显示所需高度
  */
-- (CGFloat)nl_heightWithMaxWidth:(CGFloat)maxWidth text:(NSString *)text;
+- (CGFloat)nl_heightWithMaxWidth:(CGFloat)maxWidth text:(NSString * _Nonnull)text;
 
 /**
  *  @brief 获取在最大宽度为maxWidth时，本label中的文本显示所需高度
@@ -54,5 +54,12 @@
  */
 - (CGFloat)nl_heightWithMaxWidth:(CGFloat)maxWidth;
 
++ (_Nonnull instancetype)nl_labelWithTextColor:(UIColor *_Nullable)textColor fontSize:(CGFloat)fontSize builder:(void (^_Nullable)(UILabel * _Nonnull label))builder;
++ (_Nonnull instancetype)nl_labelWithText:(NSString  * _Nullable )text textColor:(UIColor * _Nullable)textColor fontSize:(CGFloat)fontSize builder:(void (^ _Nullable)( UILabel * _Nonnull label))builder;
++ (_Nonnull instancetype)nl_labelWithText:(NSString * _Nullable)text textColor:(UIColor * _Nullable)textColor fontSize:(CGFloat)fontSize backgroundColor:(UIColor * _Nullable)backgroundColor builder:(void (^_Nullable )(UILabel *_Nonnull label))builder;
+
++ (_Nonnull instancetype)nl_labelWithTextColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize builder:(void (^_Nullable)(UILabel *_Nonnull label))builder;
++ (_Nonnull instancetype)nl_labelWithText:(NSString *_Nullable)text textColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize builder:(void (^ _Nullable )(UILabel *_Nonnull label))builder;
++ (_Nonnull instancetype)nl_labelWithText:(NSString *_Nullable )text textColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize backgroundColorHex:(UInt32)backgroundColorHex builder:(void (^_Nullable)(UILabel *_Nonnull label))builder;
 
 @end

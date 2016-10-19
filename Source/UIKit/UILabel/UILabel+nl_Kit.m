@@ -8,6 +8,7 @@
 
 #import "UILabel+nl_Kit.h"
 #import "NSString+nl_Kit.h"
+#import "UIColor+nl_Kit.h"
 
 @implementation UILabel (nl_Kit)
 
@@ -56,6 +57,47 @@
  */
 - (CGFloat)nl_heightWithMaxWidth:(CGFloat)maxWidth {
   return [self.text nl_heightWithWidth:maxWidth font:self.font];
+}
+
++ (instancetype)nl_labelWithTextColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize builder:(void (^)(UILabel *label))builder {
+  return [self nl_labelWithText:nil textColorHex:colorHex fontSize:fontSize builder:builder];
+}
+
++ (instancetype)nl_labelWithText:(NSString *)text textColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize builder:(void (^)(UILabel *label))builder {
+  return [self nl_labelWithText:text textColorHex:colorHex fontSize:fontSize backgroundColorHex:0 builder:builder];
+}
+
++ (instancetype)nl_labelWithText:(NSString *)text textColorHex:(UInt32)colorHex fontSize:(CGFloat)fontSize backgroundColorHex:(UInt32)backgroundColorHex builder:(void (^)(UILabel *))builder {
+  UIColor *textColor = colorHex > 0 ? [UIColor nl_colorWithHex:colorHex] : nil;
+  UIColor *backgroundColor = backgroundColorHex > 0 ? [UIColor nl_colorWithHex:backgroundColorHex] : nil;
+  return [self nl_labelWithText:text textColor:textColor fontSize:fontSize backgroundColor:backgroundColor builder:builder];
+}
+
++ (instancetype)nl_labelWithTextColor:(UIColor *)textColor fontSize:(CGFloat)fontSize builder:(void (^)(UILabel *label))builder {
+  return [self nl_labelWithText:nil textColor:textColor fontSize:fontSize builder:builder];
+}
+
++ (instancetype)nl_labelWithText:(NSString *)text textColor:(UIColor *)textColor fontSize:(CGFloat)fontSize builder:(void (^)(UILabel *label))builder {
+  return [self nl_labelWithText:text textColor:textColor fontSize:fontSize backgroundColor:nil builder:builder];
+}
+
++ (instancetype)nl_labelWithText:(NSString *)text textColor:(UIColor *)textColor fontSize:(CGFloat)fontSize backgroundColor:(UIColor *)backgroundColor builder:(void (^)(UILabel *label))builder {
+  UILabel *label = [self new];
+  [label setText:text];
+  [label setTextColor:textColor];
+  if (fontSize > 1.0) {
+    [label setFont:[UIFont systemFontOfSize:fontSize]];
+  }
+  
+  if (backgroundColor) {
+    [label setBackgroundColor:backgroundColor];
+  }
+  
+  if (builder) {
+    builder(label);
+  }
+  
+  return label;
 }
 
 @end

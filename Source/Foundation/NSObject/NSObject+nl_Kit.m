@@ -19,4 +19,34 @@
   return [[self class] nl_sizeInstance];
 }
 
++ (BOOL)nl_swizzleMethod:(SEL)selector withMethod:(SEL)otherSelector {
+  Class class = [self class];
+  
+  Method originalMethod = class_getInstanceMethod(class, selector);
+  Method otherMethod = class_getInstanceMethod(class, otherSelector);
+  
+  if (originalMethod == nil || otherMethod == nil) {
+    return NO;
+  }
+  
+  method_exchangeImplementations(originalMethod, otherMethod);
+  
+  return YES;
+}
+
++ (BOOL)nl_swizzleClassMethod:(SEL)selector withMethod:(SEL)otherSelector {
+  Class class = [self class];
+  
+  Method originalMethod = class_getClassMethod(class, selector);
+  Method otherMethod = class_getClassMethod(class, otherSelector);
+  
+  if (originalMethod == nil || otherMethod == nil) {
+    return NO;
+  }
+  
+  method_exchangeImplementations(originalMethod, otherMethod);
+  
+  return YES;
+}
+
 @end

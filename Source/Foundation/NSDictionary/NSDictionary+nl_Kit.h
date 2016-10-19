@@ -48,6 +48,20 @@
  */
 - (NSUInteger)nl_sizeAllObjects;
 
+/**
+ *  @brief Convert the dictionary to json data.
+ *
+ *  @return Json Data.
+ */
+- (NSData *)nl_toJsonData;
+
+/**
+ *  @brief Convert the dictionary to json string.
+ *
+ *  @return Json string.
+ */
+- (NSString *)nl_toJsonString;
+
 @end
 
 

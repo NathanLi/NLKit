@@ -59,6 +59,33 @@
 
 - (BOOL)nl_isEmpty;
 
+/**
+ *  @brief 格式化文件大小字符串
+ *
+ *  @param fileSize 文件大小
+ *
+ *  @return 格式化后的字符串对象。形如：1.12MB ...
+ */
++ (NSString *)nl_formatWithFileSize:(long long)fileSize;
+
+/**
+ *  @brief 将字符串当作URL的参数进行解析
+ *
+ *  @return 解析后的字典
+ */
+- (NSDictionary<NSString *, id> *)nl_URLParameterDictionary;
+
+/**
+ *  @brief 将字符串当作URL，并在其后面加上参数
+ *
+ *  @param parameters 要加上的参数
+ *
+ *  @return 新生成的字符串
+ */
+- (NSString *)nl_addParameters:(NSDictionary<NSString *, id> *)parameters;
+
+- (long)longValue;
+
 @end
 
 
