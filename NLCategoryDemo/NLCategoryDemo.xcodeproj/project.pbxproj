@@ -60,7 +60,6 @@
 		D8454C8F1DB71E8D00BEE9D1 /* UIBezierPath+Length.m in Sources */ = {isa = PBXBuildFile; fileRef = D8454C801DB71E8D00BEE9D1 /* UIBezierPath+Length.m */; };
 		D8454C901DB71E8D00BEE9D1 /* UICollectionView+nl_Kit.m in Sources */ = {isa = PBXBuildFile; fileRef = D8454C831DB71E8D00BEE9D1 /* UICollectionView+nl_Kit.m */; };
 		D8454C911DB71E8D00BEE9D1 /* UIPickerView+nl_Kit.m in Sources */ = {isa = PBXBuildFile; fileRef = D8454C861DB71E8D00BEE9D1 /* UIPickerView+nl_Kit.m */; };
-		D8454C931DB71E8D00BEE9D1 /* UITableView+HoomicTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D8454C8B1DB71E8D00BEE9D1 /* UITableView+HoomicTool.m */; };
 		D8454C941DB71E8D00BEE9D1 /* UITableView+nl_Kit.m in Sources */ = {isa = PBXBuildFile; fileRef = D8454C8D1DB71E8D00BEE9D1 /* UITableView+nl_Kit.m */; };
 /* End PBXBuildFile section */
 
@@ -670,7 +669,7 @@
 		D8454BAB1DB7145600BEE9D1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = NL;
 				TargetAttributes = {
 					D8454BB21DB7145600BEE9D1 = {
@@ -784,7 +783,6 @@
 				D8454C721DB714B100BEE9D1 /* UITableView+HoomicTool.m in Sources */,
 				D8454C6A1DB714B100BEE9D1 /* UIColor+nl_Kit.m in Sources */,
 				D8454BB81DB7145600BEE9D1 /* main.m in Sources */,
-				D8454C931DB71E8D00BEE9D1 /* UITableView+HoomicTool.m in Sources */,
 				D8454C661DB714B100BEE9D1 /* UIButton+Color.m in Sources */,
 				D8454C901DB71E8D00BEE9D1 /* UICollectionView+nl_Kit.m in Sources */,
 				D8454C701DB714B100BEE9D1 /* UINavigationBar+nl_Kit.m in Sources */,
@@ -863,6 +861,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -910,6 +909,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1022,6 +1022,7 @@
 				D8454BE21DB7145700BEE9D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D8454BE31DB7145700BEE9D1 /* Build configuration list for PBXNativeTarget "NLCategoryDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -1030,6 +1031,7 @@
 				D8454BE51DB7145700BEE9D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D8454BE61DB7145700BEE9D1 /* Build configuration list for PBXNativeTarget "NLCategoryDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -1038,6 +1040,7 @@
 				D8454BE81DB7145700BEE9D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
