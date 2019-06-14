@@ -36,32 +36,43 @@
 }
 
 - (UIImage *)nl_drawText:(NSString *)text {
-  return [self nl_drawText:text inRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+    return [self nl_drawText:text inOrigin:CGPointZero];
 }
 
-- (UIImage *)nl_drawText:(NSString *)text inRect:(CGRect)rect {
-  return [self nl_drawText:text font:[UIFont systemFontOfSize:[UIFont labelFontSize]] inRect:rect];
+- (UIImage *)nl_drawText:(NSString *)text inOrigin:(CGPoint)origin {
+    return [self nl_drawText:text font:[UIFont systemFontOfSize:[UIFont labelFontSize]] inOrigin:origin];
 }
 
 - (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font {
-  return [self nl_drawText:text font:font inRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+    return [self nl_drawText:text font:font inOrigin:CGPointMake(0, 0)];
 }
 
-- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inRect:(CGRect)rect {
-  UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
-  [self drawInRect:CGRectMake(0,0, self.size.width,self.size.height)];
-  [[UIColor whiteColor] set];
-  
-  NSDictionary *att = @{NSFontAttributeName:font,
-                        NSForegroundColorAttributeName: [UIColor whiteColor]};
-  CGSize size = [text sizeWithAttributes:att];
-  rect = CGRectMakeWithCenterAndSize(CGRectCenter(rect), size);
-  [text drawInRect:rect withAttributes:att];
-  
-  
-  UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-  return newImage;
+- (UIImage *)nl_composite:(UIImage *)image origin:(CGPoint)origin {
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
+
+    [self drawAtPoint:CGPointZero];
+    [image drawInRect:CGRectMake(origin.x, origin.y, image.size.width, image.size.height)];
+
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inOrigin:(CGPoint)origin {
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
+    [self drawInRect:CGRectMake(0,0, self.size.width,self.size.height)];
+    [[UIColor whiteColor] set];
+
+    NSDictionary *att = @{NSFontAttributeName:font,
+                          NSForegroundColorAttributeName: [UIColor whiteColor]};
+    CGSize size = [text sizeWithAttributes:att];
+    CGRect rect = CGRectMakeWithOriginAndSize(origin, size);
+    [text drawInRect:rect withAttributes:att];
+
+
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 - (UIImage *)nl_drawWithBackgroundColor:(UIColor *)color size:(CGSize)size {

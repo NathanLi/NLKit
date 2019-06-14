@@ -17,9 +17,19 @@
 @property (nonatomic, strong) NSData *nl_imageData;
 
 - (UIImage *)nl_drawText:(NSString *)text;
-- (UIImage *)nl_drawText:(NSString *)text inRect:(CGRect)rect;
-- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inRect:(CGRect)rect;
+- (UIImage *)nl_drawText:(NSString *)text inOrigin:(CGPoint)origin;
+- (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font inOrigin:(CGPoint)origin;
 - (UIImage *)nl_drawText:(NSString *)text font:(UIFont *)font;
+
+
+    /**
+     图片合成
+
+     @param image 要添加到图片上的图片
+     @param origin 添加到的位置
+     @return 新生成的图片
+     */
+- (UIImage *)nl_composite:(UIImage *)image origin:(CGPoint)origin;
 
 /**
  *  @brief  创建并返回一张新的图像对象，并且该图像可以中心点为复制点进行拉伸
